@@ -45,7 +45,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
             org.opencontainers.image.title=mariadb-client
-            org.opencontainers.image.description=Alpine image with mariadb-client package
+            org.opencontainers.image.description='Alpine image with mariadb-client package'
             org.opencontainers.image.url=https://github.com/ectobit/container-images/tree/main/mariadb-client
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.version=${{ steps.prep.outputs.version }}

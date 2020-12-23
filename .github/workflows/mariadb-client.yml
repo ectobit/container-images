@@ -8,7 +8,7 @@ on:
       - "mariadb-client/**"
 
 jobs:
-  mariadb client:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out

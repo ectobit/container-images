@@ -1,4 +1,4 @@
-name: build
+name: mariadb-client
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - "mariadb-client/**"
 
 jobs:
-  mariadb-client:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -32,7 +32,7 @@ jobs:
         run: |
           IMAGE=ectobit/mariadb-client
           VERSION=$(grep FROM mariadb-client/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
-          TAGS="${IMAGE}:${VERSION},${IMAGE}:sha-${GITHUB_SHA::8},latest"
+          TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},latest"
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
       - name: Build and push image to Docker Hub

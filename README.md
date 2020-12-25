@@ -52,4 +52,4 @@ jobTemplate:
 [![Pulls](https://img.shields.io/docker/pulls/ectobit/golang)](https://hub.docker.com/r/ectobit/golang)
 [![Stars](https://img.shields.io/docker/stars/ectobit/golang)](https://hub.docker.com/r/ectobit/golang)
 
-This image is based on the newest Golang Alpine and contains golangci-lint and golint linters. It can be used for CI purposes.
+This image is based on the newest Golang Alpine and contains golangci-lint and golint linters. It can be used as Docker based CI step in Jenkins and Drone.

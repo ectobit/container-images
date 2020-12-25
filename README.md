@@ -8,6 +8,6 @@ All images within this monorepo are intended to be used primarily within Kuberne
 
 This image is based on the latest Alpine and contains MySQL/MariaDB utilities like mysql, mysqldump and mysqlcheck which may be used for database backup, tables optimizatition and similar purposes.
 
-## [ectobit/go-lint](https://github.com/ectobit/container-images/tree/main/go-lint/README.md)
+## [ectobit/golang](https://github.com/ectobit/container-images/tree/main/golang/README.md)
 
-This image is based on Golang Alpine and contains golangci-lint and golint linters.
+This image is based on Golang Alpine and contains golangci-lint and golint linters. It can be used for CI purposes.

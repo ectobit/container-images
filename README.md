@@ -18,32 +18,32 @@ This image is based on the latest Alpine and contains MySQL/MariaDB utilities li
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-name: mariadb-optimize-tables
+  name: mariadb-optimize-tables
 spec:
-schedule: "51 2 * * 0"
-concurrencyPolicy: Forbid
-successfulJobsHistoryLimit: 1
-failedJobsHistoryLimit: 1
-jobTemplate:
+  schedule: "2 2 * * 0"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
     spec:
-    template:
+      template:
         spec:
-        containers:
-        - name: mariadb-optimize-tables
+          containers:
+          - name: mariadb-optimize-tables
             image: ectobit/mariadb-client
             imagePullPolicy: Always
             env:
             - name: PASSWORD
-            valueFrom:
+              valueFrom:
                 secretKeyRef:
-                name: mariadb
-                key: mariadb-root-password
+                  name: mariadb
+                  key: mariadb-root-password
             command:
             - sh
             - -c
             - mysqlcheck -h mariadb -u root -p${PASSWORD} -o --all-databases
-        restartPolicy: OnFailure
-    ttlSecondsAfterFinished: 172800
+          restartPolicy: OnFailure
+      ttlSecondsAfterFinished: 172800
 ```
 
 ## [ectobit/golang](https://hub.docker.com/repository/docker/ectobit/golang)

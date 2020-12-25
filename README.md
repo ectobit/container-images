@@ -2,12 +2,12 @@
 
 [![GitHub](https://img.shields.io/github/license/acim/go-reflex)](LICENSE)
 
-## [ectobit/mariadb-client](https://hub.docker.com/repository/docker/ectobit/mariadb-client)
+All images within this monorepo are intended to be used primarily within Kubernetes cluster. Therefore images contain neither entrypoint nor command. Click on the links bellow to find more information about each image.
 
-![Docker](https://github.com/ectobit/container-images/workflows/mariadb-client/badge.svg)
-[![Pulls](https://img.shields.io/docker/pulls/ectobit/mariadb-client)](https://hub.docker.com/r/ectobit/mariadb-client)
-[![Stars](https://img.shields.io/docker/stars/ectobit/mariadb-client)](https://hub.docker.com/r/ectobit/mariadb-client)
+## [ectobit/mariadb-client](https://github.com/ectobit/container-images/tree/main/mariadb-client/README.md)
 
-- based on the latest Alpine image
-- contains MySQL/MariaDB utilities like mysql, mysqldump, mysqlcheck, mysqladmin
-- useful for database backup and tables optimization within Kubernetes cluster
+This image is based on the latest Alpine and contains MySQL/MariaDB utilities like mysql, mysqldump and mysqlcheck which may be used for database backup, tables optimizatition and similar purposes.
+
+## [ectobit/go-lint](https://github.com/ectobit/container-images/tree/main/go-lint/README.md)
+
+This image is based on Golang Alpine and contains golangci-lint and golint linters.

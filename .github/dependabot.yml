@@ -9,3 +9,7 @@ updates:
     directory: "/mariadb-client"
     schedule:
       interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/go-lint"
+    schedule:
+      interval: "daily"

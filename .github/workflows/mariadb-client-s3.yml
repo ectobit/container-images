@@ -1,0 +1,60 @@
+name: mariadb-client-s3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mariadb-client-s3/**'
+  pull_request:
+    paths:
+      - 'mariadb-client-s3/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Prepare tags
+        id: prep
+        run: |
+          IMAGE=ectobit/mariadb-client-s3
+          VERSION=$(grep FROM mariadb-client-s3/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      - name: Build and push image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./mariadb-client-s3
+          file: ./mariadb-client-s3/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.prep.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          labels: |
+            org.opencontainers.image.title=mariadb-client-s3
+            org.opencontainers.image.description='Debian image with mariadb-client package and AWS CLI v2'
+            org.opencontainers.image.url=https://github.com/ectobit/container-images/tree/main/mariadb-client-s3
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+            org.opencontainers.image.vendor=ectobit.com

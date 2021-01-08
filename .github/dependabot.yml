@@ -10,6 +10,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
+    directory: "/mariadb-client-s3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
     directory: "/golang"
     schedule:
       interval: "daily"

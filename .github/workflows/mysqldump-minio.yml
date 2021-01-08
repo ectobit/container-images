@@ -1,14 +1,14 @@
-name: mariadb-client-s3
+name: mysqldump-minio
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'mariadb-client-s3/**'
+      - 'mysqldump-minio/**'
   pull_request:
     paths:
-      - 'mariadb-client-s3/**'
+      - 'mysqldump-minio/**'
 
 jobs:
   build:
@@ -33,8 +33,8 @@ jobs:
       - name: Prepare tags
         id: prep
         run: |
-          IMAGE=ectobit/mariadb-client-s3
-          VERSION=$(grep FROM mariadb-client-s3/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          IMAGE=ectobit/mysqldump-minio
+          VERSION=$(grep FROM mysqldump-minio/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
           TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}
@@ -42,16 +42,16 @@ jobs:
       - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./mariadb-client-s3
-          file: ./mariadb-client-s3/Dockerfile
+          context: ./mysqldump-minio
+          file: ./mysqldump-minio/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           labels: |
-            org.opencontainers.image.title=mariadb-client-s3
-            org.opencontainers.image.description='Debian image with mariadb-client package and AWS CLI v2'
-            org.opencontainers.image.url=https://github.com/ectobit/container-images/tree/main/mariadb-client-s3
+            org.opencontainers.image.title=mysqldump-minio
+            org.opencontainers.image.description='Debian image with mariadb-client package and AWS CLI 2'
+            org.opencontainers.image.url=https://github.com/ectobit/container-images/tree/main/mysqldump-minio
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.version=${{ steps.prep.outputs.version }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}

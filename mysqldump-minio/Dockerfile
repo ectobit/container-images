@@ -7,3 +7,7 @@ RUN apt-get update && \
     ./aws/install && \
     rm -fr ./aws && \
     apt-get remove --purge -y curl unzip
+
+COPY backup.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/backup.sh"]

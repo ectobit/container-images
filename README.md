@@ -20,7 +20,7 @@ kind: CronJob
 metadata:
   name: mariadb-optimize-tables
 spec:
-  schedule: "2 2 * * 0"
+  schedule: '2 2 * * 0'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
@@ -29,19 +29,19 @@ spec:
       template:
         spec:
           containers:
-          - name: mariadb-optimize-tables
-            image: ectobit/mariadb-client
-            imagePullPolicy: Always
-            env:
-            - name: PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb
-                  key: mariadb-root-password
-            command:
-            - sh
-            - -c
-            - mysqlcheck -h mariadb -u root -p${PASSWORD} -o --all-databases
+            - name: mariadb-optimize-tables
+              image: ectobit/mariadb-client
+              imagePullPolicy: Always
+              env:
+                - name: PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mariadb
+                      key: mariadb-root-password
+              command:
+                - sh
+                - -c
+                - mysqlcheck -h mariadb -u root -p${PASSWORD} -o --all-databases
           restartPolicy: OnFailure
       ttlSecondsAfterFinished: 172800
 ```
@@ -53,3 +53,18 @@ spec:
 [![Stars](https://img.shields.io/docker/stars/ectobit/golang)](https://hub.docker.com/r/ectobit/golang)
 
 This image is based on the newest Golang Alpine and contains golangci-lint and golint linters. It can be used as Docker based CI step in Jenkins and Drone.
+
+## [ectobit/mysqldump-minio](https://hub.docker.com/repository/docker/ectobit/mysqldump-minio)
+
+![Docker](https://github.com/ectobit/container-images/workflows/mysqldump-minio/badge.svg)
+[![Pulls](https://img.shields.io/docker/pulls/ectobit/mysqldump-minio)](https://hub.docker.com/r/ectobit/mysqldump-minio)
+[![Stars](https://img.shields.io/docker/stars/ectobit/mysqldump-minio)](https://hub.docker.com/r/ectobit/mysqldump-minio)
+
+This image is based on the newest Debian and contains MySQL/MariaDB utilities like mysql, mysqldump and mysqlcheck which may be used for database backup, tables optimizatition and similar purposes. It is larger in size comparing to ectobit/mariadb-client, but this image also contains AWS CLI 2 which allows backup to S3 compatible storage like Minio. The entrypoint of the image is a bash script which does the actual backup. It supports the following environment variables:
+
+- MARIADB_HOST
+- MARIADB_PASSWORD
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- name: S3_ENDPOINT
+- name: S3_BUCKET

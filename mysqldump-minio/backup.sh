@@ -2,7 +2,7 @@
 
 set -e
 
-DBS=$(mysql -h ${MARIADB_HOST} -u root -p${MARIADB_PASSWORD} -e "SHOW DBS;" | grep -Ev "(information_schema|performance_schema|mysql|test)")
+DBS=$(mysql -h ${MARIADB_HOST} -u root -p${MARIADB_PASSWORD} -e "SHOW DATABASES;" | grep -Ev "(information_schema|performance_schema|mysql|test)")
 
 for DB in $DBS; do
     echo "dumping ${DB}"

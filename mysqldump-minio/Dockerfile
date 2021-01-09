@@ -10,4 +10,6 @@ RUN apt-get update && \
 
 COPY backup.sh /usr/local/bin/
 
+USER 65534
+
 ENTRYPOINT ["/usr/local/bin/backup.sh"]

@@ -9,4 +9,4 @@ FROM golang:1.15.6-alpine
 
 COPY --from=builder /go/bin/ /go/bin/
 
-USER 65534
+USER 65534:65534

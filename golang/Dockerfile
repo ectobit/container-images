@@ -11,4 +11,6 @@ RUN apk add --no-cache make
 
 COPY --from=builder /go/bin/ /go/bin/
 
+ENV XDG_CACHE_HOME=/tmp/.cache
+
 USER 65534:65534

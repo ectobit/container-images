@@ -1,11 +1,11 @@
-FROM golang:1.15.7-alpine AS builder
+FROM golang:1.15.8-alpine AS builder
 
 RUN apk add --no-cache gcc git musl-dev
 
-RUN GO111MODULE=on go get golang.org/x/lint/golint && \
-    go get github.com/golangci/golangci-lint/cmd/golangci-lint
+RUN go get golang.org/x/lint/golint && \
+    go get github.com/acim/golangci-lint/cmd/golangci-lint
 
-FROM golang:1.15.7-alpine
+FROM golang:1.15.8-alpine
 
 RUN apk add --no-cache make
 

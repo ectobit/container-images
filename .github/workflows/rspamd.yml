@@ -1,0 +1,76 @@
+name: rspamd
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'rspamd/**'
+  pull_request:
+    paths:
+      - 'rspamd/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Set up cache
+        uses: actions/cache@v2.1.4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Login to container registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Prepare tags
+        id: prep
+        run: |
+          IMAGE=ectobit/rspamd
+          BASE_IMAGE_VERSION=$(grep FROM rspamd/Dockerfile | grep -v builder | awk '{ print $2 }' | cut -d ':' -f 2)
+          BIN_VERSION=$(docker run --rm alpine:${BASE_IMAGE_VERSION} /bin/sh -c 'apk info --no-cache -a dovecot | head -1 | cut -d " " -f1 | cut -d- -f2-')
+          VERSION="${BIN_VERSION}+alpine${BASE_IMAGE_VERSION}"
+          echo ${BASE_IMAGE_VERSION}
+          echo ${BIN_VERSION}
+          echo ${VERSION}
+          TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
+          echo ${TAGS}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+
+      - name: Build and push image to container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: rspamd
+          file: rspamd/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.prep.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+            org.opencontainers.image.vendor=ectobit.com
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache

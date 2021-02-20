@@ -5,15 +5,19 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker"
-    directory: "/mariadb-client"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
-    directory: "/mariadb-client-s3"
+      interval: 'daily'
+  - package-ecosystem: 'docker'
+    directory: '/mariadb-client'
     schedule:
-      interval: "daily"
-  - package-ecosystem: "docker"
-    directory: "/golang"
+      interval: 'daily'
+  - package-ecosystem: 'docker'
+    directory: '/mariadb-client-s3'
     schedule:
-      interval: "daily"
+      interval: 'daily'
+  - package-ecosystem: 'docker'
+    directory: '/golang'
+    schedule:
+      interval: 'daily'

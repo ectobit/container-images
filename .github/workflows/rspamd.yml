@@ -39,8 +39,8 @@ jobs:
         run: |
           IMAGE=ectobit/rspamd
           BASE_IMAGE_VERSION=$(grep FROM rspamd/Dockerfile | grep -v builder | awk '{ print $2 }' | cut -d ':' -f 2)
-          BIN_VERSION=$(docker run --rm alpine:${BASE_IMAGE_VERSION} /bin/sh -c 'apk info --no-cache -a dovecot | head -1 | cut -d " " -f1 | cut -d- -f2-')
-          VERSION="${BIN_VERSION}+alpine${BASE_IMAGE_VERSION}"
+          BIN_VERSION=$(docker run --rm alpine:${BASE_IMAGE_VERSION} /bin/sh -c 'apk info --no-cache -a dovecot | sed "3q;d" | cut -d " " -f1 | cut -d- -f2-')
+          VERSION="${BIN_VERSION}alpine${BASE_IMAGE_VERSION}"
           echo ${BASE_IMAGE_VERSION}
           echo ${BIN_VERSION}
           echo ${VERSION}

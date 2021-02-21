@@ -1,7 +1,5 @@
 # Optimized container images for different utility purposes
 
-[![GitHub](https://img.shields.io/github/license/acim/go-reflex)](LICENSE)
-
 All images within this monorepo are intended to be used primarily within Kubernetes cluster. Therefore images contain neither entrypoint nor command. Click on the links bellow to find more information about each image.
 
 ## [ectobit/mariadb-client](https://hub.docker.com/repository/docker/ectobit/mariadb-client)

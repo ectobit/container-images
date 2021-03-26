@@ -5,4 +5,4 @@
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/ectobit/rspamd?label=size&logo=docker&sort=semver)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ectobit/rspamd?logo=docker)
 
-Alpine based container image with [Rspamd](https://rspamd.com/).
+Alpine based container image with [Rspamd](https://rspamd.com/) including controller and proxy.

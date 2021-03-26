@@ -1,4 +1,4 @@
-FROM alpine:3.13.2
+FROM alpine:3.13.3
 
 RUN apk add --no-cache ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy && \
     chown -R rspamd:rspamd /etc/rspamd

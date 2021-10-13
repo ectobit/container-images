@@ -6,7 +6,8 @@ RUN apt-get update && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm -fr ./aws && \
-    apt-get remove --purge -y curl unzip
+    apt-get remove --purge -y curl unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY backup.sh /usr/local/bin/
 

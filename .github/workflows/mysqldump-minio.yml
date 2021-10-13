@@ -20,7 +20,7 @@ jobs:
         uses: hadolint/hadolint-action@v1.5.0
         with:
           dockerfile: mysqldump-minio/Dockerfile
-          ignore: DL3018
+          ignore: DL3008 DL3015
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Set up cache

@@ -1,6 +1,6 @@
 FROM golang:1.17.2-alpine AS builder
 
-RUN apk add --no-cache gcc git musl-dev && \
+RUN apk add --no-cache binutils-gold gcc git musl-dev && \
     go install golang.org/x/lint/golint@latest && \
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.3
 FROM debian:10.7-slim
 
-RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM},sharing=locked --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM},sharing=locked apt-get update && \
     apt-get --no-install-recommends install -y bzip2 ca-certificates curl mariadb-client unzip
 
 RUN if [ "${TARGETPLATFORM}" = "linux/md64" ]; \
@@ -11,7 +11,7 @@ RUN if [ "${TARGETPLATFORM}" = "linux/md64" ]; \
     ./aws/install && \
     rm -fr aws
 
-RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get remove --purge -y curl unzip && \
+RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM},sharing=locked --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM},sharing=locked apt-get remove --purge -y curl unzip && \
     apt-get autoremove
 
 COPY backup.sh /usr/local/bin/

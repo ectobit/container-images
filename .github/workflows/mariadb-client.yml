@@ -44,7 +44,6 @@ jobs:
         with:
           context: ./mariadb-client
           platforms: linux/amd64,linux/arm64
-          file: ./mariadb-client/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha

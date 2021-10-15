@@ -1,17 +1,17 @@
 # syntax=docker/dockerfile:1.3
 FROM debian:10.7-slim
 
-ARG AWS_CLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
-
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get update && \
     apt-get --no-install-recommends install -y bzip2 ca-certificates curl mariadb-client unzip
 
-RUN curl -sSL -o awscliv2.zip ${AWS_CLI_URL} && \
+RUN if [ "${TARGETPLATFORM}" = "linux/md64" ]; \
+    then curl -sSL -o awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip; \
+    else curl -sSL -o awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip; fi && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
     rm -fr aws
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get remove --purge -y curl unzip && \
+RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get remove --purge -y curl unzip && \
     apt-get autoremove
 
 COPY backup.sh /usr/local/bin/

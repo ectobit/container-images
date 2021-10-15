@@ -15,7 +15,7 @@ RUN if [ ${TARGETPLATFORM} = "linux/amd64" ]; \
     rm -fr aws
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get remove --purge -y curl unzip && \
-    apt-get autoremove
+    apt-get autoremove -y
 
 COPY backup.sh /usr/local/bin/
 

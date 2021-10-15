@@ -3,9 +3,7 @@ FROM alpine:3.14.2
 
 ARG TARGETPLATFORM
 
-RUN echo TARGET PLATFORM ${TARGETPLATFORM}
-
-RUN --mount=type=cache,target=/var/cache/apk apk add -U --allow-untrusted ca-certificates curl musl-dev rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata
+RUN --mount=type=cache,target=/var/cache/apk if [ "${TARGETPLATFORM}" == "linux/amd64" ]; then apk add -U ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata; else apk add -U --allow-untrusted ca-certificates curl musl-dev rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata; fi
 
 RUN chown -R rspamd:rspamd /etc/rspamd
 

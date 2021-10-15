@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM debian:10.11-slim
+FROM debian:11.1-slim
 
 RUN echo PLATFORM "${TARGETPLATFORM}"
 

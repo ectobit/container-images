@@ -20,7 +20,7 @@ jobs:
         uses: hadolint/hadolint-action@v1.6.0
         with:
           dockerfile: mysqldump-minio/Dockerfile
-          ignore: DL3008 DL3015
+          ignore: DL3008 DL3009
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx

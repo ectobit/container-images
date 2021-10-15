@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM debian:10.11-slim
+FROM debian:11.1-slim
 
 ARG TARGETPLATFORM
 
@@ -11,7 +11,6 @@ RUN if [ ${TARGETPLATFORM} = "linux/amd64" ]; \
     else curl -sSL -o awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip; fi && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
-    aws --version && \
     rm -fr aws
 
 RUN --mount=type=cache,target=/var/cache/apt,id=${TARGETPLATFORM} --mount=type=cache,target=/var/lib/apt,id=${TARGETPLATFORM} apt-get remove --purge -y curl unzip && \

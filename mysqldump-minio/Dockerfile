@@ -11,7 +11,7 @@ RUN curl -sSL -o awscliv2.zip ${AWS_CLI_URL} && \
     ./aws/install && \
     rm -fr aws
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get remove --purge -y curl unzip && apt autoremove
+RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get remove --purge -y curl unzip && apt-get autoremove
 
 COPY backup.sh /usr/local/bin/
 

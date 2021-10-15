@@ -25,6 +25,10 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
+        id: amd64
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1.6.0
+        id: arm64
       - name: Login to container registry
         uses: docker/login-action@v1.10.0
         with:
@@ -42,11 +46,34 @@ jobs:
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-      - name: Build and push image to container registry
+      - name: Build and push amd64 image to container registry
         uses: docker/build-push-action@v2.7.0
         with:
+          builder: ${{ steps.amd64.outputs.name }}
           context: rspamd
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+          file: rspamd/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.prep.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+            org.opencontainers.image.vendor=ectobit.com
+      - name: Build and push arm64 image to container registry
+        uses: docker/build-push-action@v2.7.0
+        with:
+          builder: ${{ steps.arm64.outputs.name }}
+          context: rspamd
+          file: Dockerfile.arm64
+          platforms: linux/arm64
           file: rspamd/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}

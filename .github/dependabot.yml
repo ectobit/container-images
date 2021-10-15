@@ -10,14 +10,14 @@ updates:
     schedule:
       interval: 'daily'
   - package-ecosystem: 'docker'
-    directory: '/mariadb-client'
+    directory: 'mariadb-client'
     schedule:
       interval: 'daily'
   - package-ecosystem: 'docker'
-    directory: '/mariadb-client-s3'
+    directory: 'mysqldump-minio'
     schedule:
       interval: 'daily'
   - package-ecosystem: 'docker'
-    directory: '/rspamd'
+    directory: 'rspamd'
     schedule:
       interval: 'daily'

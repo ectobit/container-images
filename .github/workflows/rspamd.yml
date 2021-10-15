@@ -52,7 +52,6 @@ jobs:
           builder: ${{ steps.amd64.outputs.name }}
           context: rspamd
           platforms: linux/amd64
-          file: rspamd/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha
@@ -74,7 +73,6 @@ jobs:
           context: rspamd
           file: Dockerfile.arm64
           platforms: linux/arm64
-          file: rspamd/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha

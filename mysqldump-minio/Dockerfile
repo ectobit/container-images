@@ -2,7 +2,7 @@
 FROM debian:10.7-slim
 
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get update && \
-    apt-get --no-install-recommends install -y bzip2 curl mariadb-client unzip
+    apt-get --no-install-recommends install -y bzip2 ca-certificates curl mariadb-client unzip
 
 RUN curl -sSL -o awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \
     unzip awscliv2.zip && \

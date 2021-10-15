@@ -3,7 +3,7 @@ FROM debian:10.11-slim
 
 RUN echo PLATFORM "${TARGETPLATFORM}"
 
-RUN if [ "${TARGETPLATFORM}" == "linux/amd64" ]; \
+RUN if [ "${TARGETPLATFORM}" = "linux/amd64" ]; \
     then echo DA, OVO JE AMD64 "${TARGETPLATFORM}"; \
     else echo NE, OVO JE ARM64 "${TARGETPLATFORM}"; fi
 

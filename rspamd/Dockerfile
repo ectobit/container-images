@@ -3,7 +3,7 @@ FROM alpine:3.14.2
 
 ARG TARGETPLATFORM
 
-RUN echo TARGET PLATFORM {$TARGETPLATFORM}
+RUN echo TARGET PLATFORM ${TARGETPLATFORM}
 
 RUN --mount=type=cache,target=/var/cache/apk apk add -U --allow-untrusted ca-certificates curl musl-dev rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata
 

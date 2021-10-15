@@ -5,7 +5,7 @@ ARG TARGETPLATFORM
 
 RUN --mount=type=cache,target=/var/cache/apk if [ "${TARGETPLATFORM}" = "linux/amd64" ]; \
     then apk add -U ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata; \
-    else echo HERE ${TARGETPLATFORM}; fi
+    else apk add -U ca-certificates curl musl musl-dev rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata; fi
 
 RUN chown -R rspamd:rspamd /etc/rspamd
 

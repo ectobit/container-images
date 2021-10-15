@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1.3
 FROM debian:11.1-slim
 
+ARG TARGETPLATFORM
+
 RUN echo PLATFORM ${TARGETPLATFORM}
 
 RUN if [ ${TARGETPLATFORM} = "linux/amd64" ]; \

@@ -49,7 +49,6 @@ jobs:
           builder: ${{ steps.amd64.outputs.name }}
           context: ./mysqldump-minio
           platforms: linux/amd64
-          file: ./mysqldump-minio/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha
@@ -69,8 +68,8 @@ jobs:
         with:
           builder: ${{ steps.arm64.outputs.name }}
           context: ./mysqldump-minio
+          build-args: AWS_CLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip
           platforms: linux/arm64
-          file: ./mysqldump-minio/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha

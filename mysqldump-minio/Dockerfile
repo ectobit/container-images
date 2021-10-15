@@ -1,15 +1,17 @@
 # syntax=docker/dockerfile:1.3
 FROM debian:10.7-slim
 
+ARG AWS_CLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get update && \
     apt-get --no-install-recommends install -y bzip2 ca-certificates curl mariadb-client unzip
 
-RUN curl -sSL -o awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \
+RUN curl -sSL -o awscliv2.zip ${AWS_CLI_URL} && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
     rm -fr aws
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get remove --purge -y curl unzip
+RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get remove --purge -y curl unzip && apt autoremove
 
 COPY backup.sh /usr/local/bin/
 

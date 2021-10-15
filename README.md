@@ -8,7 +8,7 @@ All images within this monorepo are intended to be used primarily within Kuberne
 [![Pulls](https://img.shields.io/docker/pulls/ectobit/mariadb-client)](https://hub.docker.com/r/ectobit/mariadb-client)
 [![Stars](https://img.shields.io/docker/stars/ectobit/mariadb-client)](https://hub.docker.com/r/ectobit/mariadb-client)
 
-This image is based on the latest Alpine and contains MySQL/MariaDB utilities like mysql, mysqldump and mysqlcheck which may be used for database backup, tables optimizatition and similar purposes.
+This image is based on the latest Alpine and contains MySQL/MariaDB utilities like mysql, mysqldump and mysqlcheck which may be used for database backup, tables optimization and similar purposes.
 
 ### Example usage for tables optimization using CronJob Kubernetes resource
 
@@ -43,14 +43,6 @@ spec:
           restartPolicy: OnFailure
       ttlSecondsAfterFinished: 172800
 ```
-
-## [ectobit/golang](https://hub.docker.com/repository/docker/ectobit/golang)
-
-![Docker](https://github.com/ectobit/container-images/workflows/golang/badge.svg)
-[![Pulls](https://img.shields.io/docker/pulls/ectobit/golang)](https://hub.docker.com/r/ectobit/golang)
-[![Stars](https://img.shields.io/docker/stars/ectobit/golang)](https://hub.docker.com/r/ectobit/golang)
-
-This image is based on the newest Golang Alpine and contains golangci-lint and golint linters. It can be used as Docker based CI step in Jenkins and Drone.
 
 ## [ectobit/mysqldump-minio](https://hub.docker.com/repository/docker/ectobit/mysqldump-minio)
 

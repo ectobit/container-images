@@ -71,7 +71,7 @@ jobs:
         with:
           builder: ${{ steps.arm64.outputs.name }}
           context: rspamd
-          file: Dockerfile.arm64
+          file: rspamd/Dockerfile.arm64
           platforms: linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}

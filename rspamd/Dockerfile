@@ -3,7 +3,7 @@ FROM alpine:3.14.2
 
 ARG TARGETPLATFORM
 
-RUN --mount=type=cache,target=/var/cache/apk,id=${TARGETPLATFORM} apk add -U ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata
+RUN --mount=type=cache,target=/var/cache/apk,id=${TARGETPLATFORM} apk add --no-cache ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata
 
 RUN chown -R rspamd:rspamd /etc/rspamd
 

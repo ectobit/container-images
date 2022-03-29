@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM debian:11.2-slim
+FROM debian:11.3-slim
 
 ARG TARGETPLATFORM
 

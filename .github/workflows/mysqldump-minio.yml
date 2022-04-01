@@ -16,11 +16,11 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v3
-      # - name: Lint Dockerfile
-      #   uses: hadolint/hadolint-action@v2.0.0
-      #   with:
-      #     dockerfile: mysqldump-minio/Dockerfile
-      #     ignore: DL3008 DL3009
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: mysqldump-minio/Dockerfile
+          ignore: DL3008,DL3009
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx

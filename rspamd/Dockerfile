@@ -3,7 +3,15 @@ FROM alpine:3.15.4
 
 ARG TARGETPLATFORM
 
-RUN --mount=type=cache,target=/var/cache/apk,id=${TARGETPLATFORM} apk add --no-cache ca-certificates curl rspamd rspamd-controller rspamd-fuzzy rspamd-proxy tzdata
+RUN --mount=type=cache,target=/var/cache/apk,id=${TARGETPLATFORM} apk add \
+    ca-certificates \
+    curl \
+    rspamd \
+    rspamd-controller \
+    rspamd-fuzzy \
+    rspamd-proxy \
+    tzdata &&\
+    apk upgrade --no-cache
 
 RUN chown -R rspamd:rspamd /etc/rspamd
 

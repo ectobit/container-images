@@ -34,8 +34,11 @@ jobs:
         id: prep
         run: |
           IMAGE=ectobit/mariadb-client
-          VERSION=$(grep FROM mariadb-client/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          BASE_IMAGE_VERSION=$(grep FROM mariadb-client/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          BIN_VERSION=$(docker run --rm alpine:${BASE_IMAGE_VERSION} /bin/sh -c 'apk info --no-cache -a mariadb-client | sed "3q;d" | cut -d " " -f1 | cut -d- -f3')
+          VERSION="${BIN_VERSION}-alpine${BASE_IMAGE_VERSION}"
           TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
+          echo ${TAGS}
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}
           echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')

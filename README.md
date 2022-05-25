@@ -98,3 +98,30 @@ spec:
           restartPolicy: OnFailure
       ttlSecondsAfterFinished: 172800
 ```
+
+## [ectobit/pg-dump-s3](https://hub.docker.com/repository/docker/ectobit/pg-dump-s3)
+
+![Docker](https://github.com/ectobit/container-images/workflows/pg-dump-s3/badge.svg)
+[![Pulls](https://img.shields.io/docker/pulls/ectobit/pg-dump-s3)](https://hub.docker.com/r/ectobit/pg-dump-s3)
+[![Stars](https://img.shields.io/docker/stars/ectobit/pg-dump-s3)](https://hub.docker.com/r/ectobit/pg-dump-s3)
+
+This image is based on the latest Ubuntu and contains PostgreSQL client utilities including psql, pg_dump and pg_dumpall but also aws-cli 2 to be able to dump and restore from s3.
+
+### Environment variables
+
+#### pg_dump related
+
+- PGHOST
+- PGPORT (optional, defaults to 5432)
+- PGOPTIONS (optional connection flags, see PostgreSQL documentation)
+- PGUSER
+- PGPASSWORD
+- DBS (comma separated list of databases to be dumped)
+- EXTRA_OPTS (optional, extra options to pass to pg_dump command)
+
+#### aws cli related
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- S3_BUCKET
+- S3_ENDPOINT (optional, i.e. for minio set to https://host.domain.com:9000)

@@ -1,0 +1,63 @@
+name: pg-dump-s3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pg-dump-s3/**'
+  pull_request:
+    paths:
+      - 'pg-dump-s3/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: pg-dump-s3/Dockerfile
+          ignore: DL3008
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2.0.0
+      - name: Login to container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Prepare tags
+        id: prep
+        run: |
+          IMAGE=ectobit/pg-dump-s3
+          BASE_IMAGE_VERSION=$(grep FROM pg-dump-s3/Dockerfile | grep -v builder| awk '{ print $2 }' | cut -d ':' -f 2)
+          BIN_VERSION=$(docker run --rm ubuntu:${BASE_IMAGE_VERSION} /bin/sh -c 'apt-get -qq update && apt-cache policy postgresql-client | sed "3q;d" | cut -d " " -f4 | cut -d ":" -f2 | cut -d "+" -f1')
+          VERSION="${BIN_VERSION}-ubuntu${BASE_IMAGE_VERSION}"
+          TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      - name: Build and push image to container registry
+        uses: docker/build-push-action@v3.0.0
+        with:
+          context: ./pg-dump-s3
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.prep.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.title=pg-dump-s3
+            org.opencontainers.image.description='Ubuntu image with postgresql-client package and aws-cli 2'
+            org.opencontainers.image.url=https://github.com/ectobit/container-images/tree/main/pg-dump-s3
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+            org.opencontainers.image.vendor=ectobit.com

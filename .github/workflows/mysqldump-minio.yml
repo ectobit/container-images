@@ -34,7 +34,9 @@ jobs:
         id: prep
         run: |
           IMAGE=ectobit/mysqldump-minio
-          VERSION=$(grep FROM mysqldump-minio/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          BASE_IMAGE_VERSION=$(grep FROM mysqldump-minio/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
+          BIN_VERSION=$(docker run --rm debian:${BASE_IMAGE_VERSION} /bin/sh -c 'apt-get update && apt-cache policy mariadb-client | sed "3q;d" | cut -d " " -f4 | cut -d ":" -f2 | cut -d "+" -f1')
+          VERSION="${BIN_VERSION}-debian${BASE_IMAGE_VERSION}"
           TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}

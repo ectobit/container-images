@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'mysqldump-minio/**'
+  workflow_dispatch:
 
 jobs:
   build:

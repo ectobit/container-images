@@ -4,6 +4,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/ectobit/rspamd?label=pulls&logo=docker)](https://hub.docker.com/repository/docker/ectobit/rspamd)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/ectobit/rspamd?label=size&logo=docker&sort=semver)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ectobit/rspamd?logo=docker)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/rspamd)](https://artifacthub.io/packages/search?repo=rspamd)
 
 Alpine based container image with [rspamd](https://rspamd.com/) including controller and proxy.
 

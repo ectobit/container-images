@@ -7,6 +7,7 @@
 This image is based on the newest stable Debian and contains MySQL/MariaDB mysqldump and AWS CLI 2 utilities which allow backup of MySQL/MariaDB databases directly to S3 compatible storage like Minio. Backups are going to be compressed using bzip2. The entrypoint of the image is a bash script which does the actual backup. At the moment this script probably doesn't work with AWS S3 (will be implemented just upon request, please open an issue for this). Configuration can be done using the following environment variables:
 
 - MARIADB_HOST
+- MARIADB_USER
 - MARIADB_PASSWORD
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
@@ -36,11 +37,13 @@ spec:
               env:
                 - name: MARIADB_HOST
                   value: mariadb
+                - name: MARIADB_USER
+                  value: backupuser
                 - name: MARIADB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: mariadb
-                      key: mariadb-root-password
+                      key: mariadb-backupuser-password
                 - name: AWS_ACCESS_KEY_ID
                   value: { { requiredEnv "HOME_MINIO_ACCESS_KEY" } }
                 - name: AWS_SECRET_ACCESS_KEY

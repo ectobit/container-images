@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM alpine:3.16.2
+FROM alpine:3.16.3
 
 ARG TARGETPLATFORM
 

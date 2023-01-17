@@ -18,7 +18,7 @@ jobs:
       - name: Check out
         uses: actions/checkout@v3
       - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.0.0
+        uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: pg-dump-s3/Dockerfile
           ignore: DL3008

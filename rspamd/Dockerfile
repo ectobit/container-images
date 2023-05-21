@@ -24,4 +24,4 @@ EXPOSE 11332/tcp 11333/tcp 11334/tcp 11335/tcp
 USER 100
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/usr/sbin/rspamd", "-f"]
+CMD ["/usr/bin/rspamd", "-f"]

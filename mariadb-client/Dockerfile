@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM alpine:3.18.3
+FROM alpine:3.18.4
 
 RUN --mount=type=cache,target=/var/cache/apk apk add --no-cache mariadb-client
 

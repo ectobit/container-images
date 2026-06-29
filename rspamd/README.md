@@ -9,3 +9,10 @@
 Alpine based container image with [rspamd](https://rspamd.com/) including controller and proxy.
 
 This image is used by the [same named Helm chart](https://artifacthub.io/packages/helm/ectobit/rspamd).
+
+## Redis TLS compatibility patch
+
+This image carries a small patch for `/usr/share/rspamd/lualib/lua_redis.lua` so Redis Lua script uploads (`SCRIPT LOAD`) propagate the same TLS options as normal Redis requests:
+`ssl`, `no_ssl_verify`, `ssl_ca`, `ssl_ca_dir`, `ssl_cert`, `ssl_key`, and `sni`.
+
+Keep this patch until upstream Rspamd includes equivalent Redis TLS handling for script upload.

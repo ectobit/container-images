@@ -1,0 +1,17 @@
+--- usr/share/rspamd/lualib/lua_redis.lua
++++ usr/share/rspamd/lualib/lua_redis.lua
+@@ -1908,6 +1908,14 @@
+       cur_opts['dbname'] = script.redis_params['db']
+     end
+ 
++    if script.redis_params.ssl ~= nil then cur_opts.ssl = script.redis_params.ssl end
++    if script.redis_params.no_ssl_verify ~= nil then cur_opts.no_ssl_verify = script.redis_params.no_ssl_verify end
++    if script.redis_params.ssl_ca then cur_opts.ssl_ca = script.redis_params.ssl_ca end
++    if script.redis_params.ssl_ca_dir then cur_opts.ssl_ca_dir = script.redis_params.ssl_ca_dir end
++    if script.redis_params.ssl_cert then cur_opts.ssl_cert = script.redis_params.ssl_cert end
++    if script.redis_params.ssl_key then cur_opts.ssl_key = script.redis_params.ssl_key end
++    if script.redis_params.sni then cur_opts.sni = script.redis_params.sni end
++
+     table.insert(options, cur_opts)
+   end
+ 

@@ -13,6 +13,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=${TARGETPLATFORM} apk add \
     tzdata &&\
     apk upgrade --no-cache
 
+COPY lua_redis_tls_script_load.patch /tmp/lua_redis_tls_script_load.patch
+RUN apk add --no-cache --virtual .patch-deps patch && \
+    patch -d / -p0 < /tmp/lua_redis_tls_script_load.patch && \
+    apk del .patch-deps && \
+    rm /tmp/lua_redis_tls_script_load.patch
+
 RUN chown -R rspamd:rspamd /etc/rspamd
 
 COPY entrypoint.sh /

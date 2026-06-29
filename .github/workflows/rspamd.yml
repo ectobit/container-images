@@ -6,13 +6,26 @@ on:
       - main
     paths:
       - 'rspamd/**'
+      - '.github/workflows/rspamd.yml'
   pull_request:
     paths:
       - 'rspamd/**'
+      - '.github/workflows/rspamd.yml'
   workflow_dispatch:
 
 jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+      - name: Lint GitHub Actions workflows
+        uses: raven-actions/actionlint@v2
+        with:
+          files: .github/workflows/rspamd.yml
+
   build:
+    needs: actionlint
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -26,7 +39,39 @@ jobs:
         uses: docker/setup-qemu-action@v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4.1.0
+      - name: Build rspamd image for verification
+        uses: docker/build-push-action@v7.2.0
+        with:
+          context: rspamd
+          load: true
+          push: false
+          tags: localbuild/rspamd:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Verify Redis TLS script upload patch
+        run: |
+          docker run --rm --entrypoint /bin/sh localbuild/rspamd:latest -eu -c '
+            lua_redis=/usr/share/rspamd/lualib/lua_redis.lua
+            prepare_redis_call=$(awk "/local function prepare_redis_call\\(script\\)/,/^end$/" "${lua_redis}")
+            for option in ssl no_ssl_verify ssl_ca ssl_ca_dir ssl_cert ssl_key sni; do
+              printf "%s\n" "${prepare_redis_call}" | grep -Fq "script.redis_params.${option}"
+            done
+          '
+      - name: Scan rspamd image with Grype
+        id: scan
+        uses: anchore/scan-action@v7
+        with:
+          image: localbuild/rspamd:latest
+          fail-build: true
+          severity-cutoff: high
+      - name: Upload rspamd Grype SARIF artifact
+        if: always() && steps.scan.outputs.sarif != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: rspamd-grype-sarif
+          path: ${{ steps.scan.outputs.sarif }}
       - name: Login to container registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4.2.0
         with:
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
@@ -36,18 +81,20 @@ jobs:
         run: |
           IMAGE=ectobit/rspamd
           BASE_IMAGE_VERSION=$(grep FROM rspamd/Dockerfile | awk '{ print $2 }' | cut -d ':' -f 2)
-          BIN_VERSION=$(docker run --rm alpine:${BASE_IMAGE_VERSION} /bin/sh -c 'apk info --no-cache -a rspamd | sed "4q;d" | cut -d " " -f1 | cut -d- -f2')
+          BIN_VERSION=$(docker run --rm "alpine:${BASE_IMAGE_VERSION}" /bin/sh -c 'apk info --no-cache -a rspamd | sed "4q;d" | cut -d " " -f1 | cut -d- -f2')
           VERSION="${BIN_VERSION}-alpine${BASE_IMAGE_VERSION}"
           TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8},${IMAGE}:latest"
-          echo ${TAGS}
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo "${TAGS}"
+          {
+            echo "version=${VERSION}"
+            echo "tags=${TAGS}"
+            echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } >> "${GITHUB_OUTPUT}"
       - name: Build and push image to container registry
         uses: docker/build-push-action@v7.2.0
         with:
           context: rspamd
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=gha
